@@ -6,7 +6,7 @@ on:
     - cron: 0 15 * * *
 
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt.git
+  REPO_URL: https://github.com/coolsnowwolf/lede.git
   REPO_BRANCH: openwrt-24.10
   CONFIG_FILE: configs/x86-64.config
   FEEDS_FILE: feeds/x86-64.txt
@@ -91,19 +91,6 @@ jobs:
         mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
         prefix: ${{ env.OPENWRT_PATH }}
     
-    - name: Install Feeds(安装feeds)
-      run: |
-        cd $OPENWRT_PATH
-        ./scripts/feeds update -a
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall.git feeds/passwall
-        git clone --depth 1 https://github.com/breeze303/luci-app-lucky package/lucky
-        git clone --depth 1 https://github.com/QiuSimons/luci-app-daed.git package/daed
-        rm -rf feeds/luci/applications/luci-app-passwall
-        rm -rf feeds/luci/applications/luci-app-daed
-        rm -rf feeds/packages/net/daed
-        mv feeds/passwall/luci-app-passwall feeds/luci/applications/
-        ./scripts/feeds install -a
-
     - name: Load Custom Configuration(加载自定义配置)
       run: |
         [ -e files ] && mv files $OPENWRT_PATH/files
